@@ -1,4 +1,4 @@
-import { ship } from "./main.js";
+import { ship, gameboard } from "./main.js";
 
 
 test("ship hit returns 1", () => {
@@ -56,6 +56,22 @@ test("ship length return 5", () => {
     newShip.setShipPos([5, 2], [1, 2]);
     newShip.calcShipLength();
     expect(newShip.getShipLength()).toBe(5);
+});
+
+test("create ship and that throws collision error", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5]);
+    expect(() => {
+        board.createShip([3, 4], [3, 6]);
+    }).toThrow("ship space already taken by another ship")
+});
+
+test("2 ships added to ship list with no collisions, total length/space taken is 6 units", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5]);
+    board.createShip([4, 4], [4, 6]);
+    // console.log(board.getShipList());
+    expect(board.getShipList()[0].getShipLength() + board.getShipList()[1].getShipLength()).toEqual(6);
 });
 
 
