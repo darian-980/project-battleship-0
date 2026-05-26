@@ -74,7 +74,39 @@ test("2 ships added to ship list with no collisions, total length/space taken is
     expect(board.getShipList()[0].getShipLength() + board.getShipList()[1].getShipLength()).toEqual(6);
 });
 
+test("throwing attack missed error for attack on existing missed area", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([6, 1]);
+    expect(() => {
+        (board.recieveAttack([6, 1]));
+    }).toThrow("space has already been attacked : missed");
+});
 
+test("throwing attack hit error for attack on existing hit area", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([4, 5]);
+    expect(() => {
+        (board.recieveAttack([4, 5]));
+    }).toThrow("space has already been attacked : hit");
+});
+
+test("ship hit and returned true", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    expect(board.recieveAttack([3, 4])).toBe(true);
+});
+
+test("ship not hit and returned false", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    expect(board.recieveAttack([7, 4])).toBe(false);
+});
 
 // test("'Hello, World!' with an offset of 3 with the cipher will be 'Khoor, Zruog!'", () => {
 //     expect(caesarCipher('Hello, World!', 3)).toBe('Khoor, Zruog!');

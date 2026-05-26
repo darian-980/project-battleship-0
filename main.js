@@ -94,11 +94,21 @@ export function ship() {
         return shipLength;
     }
 
-    return { shipLength, timesHit, shipSunk, shipSpaceCoordinates, setShipTitle, hit, isSunk, setShipPos, getShipLength, getShipPos, calcShipLength, getShipSpaceCoordinates };
+    function getShipTitle() {
+        return shipTitle;
+    }
+
+    function addHitCoordinates(hitShot) {
+        hitCoordinates.push(hitShot);
+    }
+
+    return { shipLength, timesHit, shipSunk, shipSpaceCoordinates, setShipTitle, hit, isSunk, setShipPos, getShipLength, getShipPos, calcShipLength, getShipSpaceCoordinates, getShipTitle, addHitCoordinates };
 }
 
 export function gameboard() {
     var shipList = [];
+    var missedShots = [];
+    var hitShots = []; // used for display purposes but also to check if a shot has ALREADY been hit before checking the ships
 
     function createShip(tip, end, title = null) {
         const newShip = ship();
@@ -109,25 +119,64 @@ export function gameboard() {
 
         for (let i = 0; i < shipList.length; i++) {
             // console.log(shipList[i].getShipSpaceCoordinates());
-            const shipCoordinates = shipList[i].getShipSpaceCoordinates(); 
+            const shipCoordinates = shipList[i].getShipSpaceCoordinates();
             for (let e = 0; e < shipCoordinates.length; e++) { // iterates through the shipCoordinates of every ship
                 if (shipCoordinates[e][0] === tip[0] && shipCoordinates[e][1] === tip[1] || shipCoordinates[e][0] === end[0] && shipCoordinates[e][1] === end[1]) { // if the new ship's position intersects with any ship then an error is thrown
                     throw new Error("ship space already taken by another ship");
                 }
             }
-        }
+        };
         newShip.setShipPos(tip, end);
         shipList.push(newShip);
         return shipList;
+    }
+
+    function recieveAttack(attackCoordinates) {
+        for (let e = 0; e < missedShots.length; e++) { // iterates through the missed shots to see if you already attacked
+            if (missedShots[e][0] === attackCoordinates[0] && missedShots[e][1] === attackCoordinates[1]) { // if this spot has already been shot at and missed, an error is thrown
+                throw new Error("space has already been attacked : missed");
+            }
+        }
+
+        for (let e = 0; e < hitShots.length; e++) { // iterates through the hit shots to see if you already attacked
+            if (hitShots[e][0] === attackCoordinates[0] && hitShots[e][1] === attackCoordinates[1]) { // if this spot has already been shot at and hit, an error is thrown
+                throw new Error("space has already been attacked : hit");
+            }
+        }
+
+        // check the ships themselves to see if they got hit
+        for (let i = 0; i < shipList.length; i++) {
+            const shipCoordinates = shipList[i].getShipSpaceCoordinates();
+            for (let e = 0; e < shipCoordinates.length; e++) { // iterates through the shipCoordinates of every ship
+                if (shipCoordinates[e][0] === attackCoordinates[0] && shipCoordinates[e][1] === attackCoordinates[1]) { // if the new ship's position intersects with any ship then an error is thrown
+                    if (shipList[i].getShipTitle() === "") {
+                        var title = "Ship";
+                    } else {
+                        var title = shipList[i].getShipTitle();
+                    }
+                    console.log(title + " has been hit at: [" + attackCoordinates[0] + "," + attackCoordinates[1] + "]"); // prints to console
+                    hitShots.push(attackCoordinates); // pushes the hit coordinates to the hitshots list
+                    shipList[i].addHitCoordinates(attackCoordinates); // pushes the hit coordinates to the ship's hitshots list
+                    return true;
+                }
+            }
+        }
+        missedShots.push(attackCoordinates);
+        return false;
     }
 
     function getShipList() {
         return shipList;
     }
 
-    return { createShip, getShipList };
+    return { createShip, getShipList, recieveAttack };
 }
 
 
 
+
+// const board = gameboard();
+// board.createShip([3, 3], [3, 5], "cruiser");
+// board.createShip([4, 4], [4, 6], "battleship");
+// board.recieveAttack([6,1]);
 
