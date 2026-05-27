@@ -1,4 +1,4 @@
-import { ship, gameboard } from "./main.js";
+import { ship, gameboard, player } from "./battleship_module.js";
 
 
 test("ship hit returns 1", () => {
@@ -106,6 +106,63 @@ test("ship not hit and returned false", () => {
     board.createShip([3, 3], [3, 5], "cruiser");
     board.createShip([4, 4], [4, 6], "battleship");
     expect(board.recieveAttack([7, 4])).toBe(false);
+});
+
+test("ship hit 3 times, sunk and returned true", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([3, 3]);
+    board.recieveAttack([3, 4]);
+    board.recieveAttack([3, 5]);
+    expect(board.getShipList()[0].isSunk()).toBe(true); //check if the first ship in the ship list is sunk or not
+});
+
+test("ship only hit 2 times, sunk and returned false", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([3, 3]);
+    board.recieveAttack([3, 4]);
+    // board.recieveAttack([3, 5]);
+    expect(board.getShipList()[0].isSunk()).toBe(false);
+});
+
+test("only ship 1 sunk, ship 2 is not sunk, return false", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([3, 3]);
+    board.recieveAttack([3, 4]);
+    board.recieveAttack([3, 5]);
+    expect(board.checkAllShipSunk()).toBe(false);
+});
+
+test("both ships sunk, return true", () => {
+    const board = gameboard();
+    board.createShip([3, 3], [3, 5], "cruiser");
+    board.createShip([4, 4], [4, 6], "battleship");
+    board.recieveAttack([3, 3]);
+    board.recieveAttack([3, 4]);
+    board.recieveAttack([3, 5]);
+    board.recieveAttack([4, 4]);
+    board.recieveAttack([4, 5]);
+    board.recieveAttack([4, 6]);
+    expect(board.checkAllShipSunk()).toBe(true);
+});
+
+
+test("test process through player function", () => {
+    const player1 = player();
+    player1.useBoard().createShip([3, 3], [3, 5], "cruiser");
+    player1.useBoard().createShip([4, 4], [4, 6], "battleship");
+    player1.useBoard().recieveAttack([3, 3]);
+    player1.useBoard().recieveAttack([3, 4]);
+    player1.useBoard().recieveAttack([3, 5]);
+    player1.useBoard().recieveAttack([4, 4]);
+    player1.useBoard().recieveAttack([4, 5]);
+    player1.useBoard().recieveAttack([4, 6]);
+    expect(player1.useBoard().checkAllShipSunk()).toBe(true);
 });
 
 // test("'Hello, World!' with an offset of 3 with the cipher will be 'Khoor, Zruog!'", () => {

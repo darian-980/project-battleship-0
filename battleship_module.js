@@ -157,6 +157,7 @@ export function gameboard() {
                     console.log(title + " has been hit at: [" + attackCoordinates[0] + "," + attackCoordinates[1] + "]"); // prints to console
                     hitShots.push(attackCoordinates); // pushes the hit coordinates to the hitshots list
                     shipList[i].addHitCoordinates(attackCoordinates); // pushes the hit coordinates to the ship's hitshots list
+                    shipList[i].hit(); //increases hit counter for ship
                     return true;
                 }
             }
@@ -165,14 +166,36 @@ export function gameboard() {
         return false;
     }
 
+    function checkAllShipSunk() {
+        // check the ships themselves to see if they got hit
+        for (let i = 0; i < shipList.length; i++) {
+            if (shipList[i].isSunk() === false) {
+                return false;
+            }
+        } return true;
+    }
+
     function getShipList() {
         return shipList;
     }
 
-    return { createShip, getShipList, recieveAttack };
+    return { createShip, getShipList, recieveAttack, checkAllShipSunk };
 }
 
+export function player() {
+    const board = gameboard();
+    var playerType = "";
 
+    function setPlayerType(type) {
+        playerType = type;
+    }
+
+    function useBoard() {
+        return board;
+    }
+
+    return { setPlayerType, useBoard }
+}
 
 
 // const board = gameboard();
