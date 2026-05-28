@@ -197,9 +197,3 @@ export function player() {
     return { setPlayerType, useBoard }
 }
 
-
-// const board = gameboard();
-// board.createShip([3, 3], [3, 5], "cruiser");
-// board.createShip([4, 4], [4, 6], "battleship");
-// board.recieveAttack([6,1]);
-

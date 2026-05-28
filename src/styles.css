@@ -1,0 +1,33 @@
+/* styles.css */
+html, body {
+    height: 100%;
+}
+
+body {
+  background-color: rebeccapurple;
+  margin: 0;
+}
+
+.container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(10, 50px);
+  border-color: black;
+  border: 1px solid black;
+}
+
+.board div {
+  height: 100%;
+  width: 100%;
+  background-color: green;
+  border: 1px solid black;
+}
