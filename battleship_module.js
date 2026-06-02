@@ -62,7 +62,7 @@ export function ship() {
             if (shipPosition[0][1] > shipPosition[1][1]) {
                 // shipSpaceCoordinates.push([shipStaticAxis, shipPosition[1][1]])
                 for (let i = 0; i < shipLength; i++) {
-                    shipSpaceCoordinates.push([shipStaticAxis, shipPosition[1][1] + i]);
+                    shipSpaceCoordinates.push([shipStaticAxis, shipPosition[0][1] - i]);
                 }
             } else {
                 // shipSpaceCoordinates.push([shipStaticAxis, shipPosition[0][1]])
@@ -74,11 +74,11 @@ export function ship() {
             const shipStaticAxis = shipPosition[0][1]; // doesn't matter if its the tip or end because it is the same
             if (shipPosition[0][0] > shipPosition[1][0]) {
                 for (let i = 0; i < shipLength; i++) {
-                    shipSpaceCoordinates.push([shipStaticAxis, shipPosition[0][0] + i]);
+                    shipSpaceCoordinates.push([shipPosition[0][0] - i, shipStaticAxis]);
                 }
             } else {
                 for (let i = 0; i < shipLength; i++) {
-                    shipSpaceCoordinates.push([shipStaticAxis, shipPosition[1][0] + i]);
+                    shipSpaceCoordinates.push([shipPosition[0][0] + i, shipStaticAxis]);
                 }
             }
         }
@@ -183,7 +183,9 @@ export function gameboard() {
 }
 
 export function player() {
+    const boardArray = [];
     const board = gameboard();
+    var playerNumber = null;
     var playerType = "";
 
     function setPlayerType(type) {
@@ -194,6 +196,14 @@ export function player() {
         return board;
     }
 
-    return { setPlayerType, useBoard }
+    function setPlayerNumber(number){
+        playerNumber = number;
+    }
+
+    function getPlayerNumber(){
+        return playerNumber;
+    }
+
+    return { setPlayerType, useBoard, setPlayerNumber, getPlayerNumber, boardArray }
 }
 

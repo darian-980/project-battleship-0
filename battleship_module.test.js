@@ -165,6 +165,26 @@ test("test process through player function", () => {
     expect(player1.useBoard().checkAllShipSunk()).toBe(true);
 });
 
+test("ship space coordinates X axis larger num first", () => {
+    const newShip = ship();
+    newShip.setShipPos([8, 3], [3, 3]);
+    expect(newShip.getShipSpaceCoordinates()).toEqual([[8, 3], [7, 3], [6, 3], [5, 3], [4, 3], [3, 3]]);
+});
+
+
+test("ship space coordinates X axis smaller num first", () => {
+    const newShip = ship();
+    newShip.setShipPos([3, 3], [8, 3]);
+    expect(newShip.getShipSpaceCoordinates()).toEqual([[3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3]]);
+});
+
+
+test("ship space coordinates return array", () => {
+    const newShip = ship();
+    newShip.setShipPos([1, 5], [1, 2]);
+    expect(newShip.getShipSpaceCoordinates()).toEqual([[1, 5], [1, 4], [1, 3], [1, 2]]);
+});
+
 // test("'Hello, World!' with an offset of 3 with the cipher will be 'Khoor, Zruog!'", () => {
 //     expect(caesarCipher('Hello, World!', 3)).toBe('Khoor, Zruog!');
 // });
