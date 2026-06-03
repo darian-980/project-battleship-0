@@ -14,6 +14,7 @@ function displayPlot(x, y, boardArray, newClassName = "hitClass") { //changes th
     boardArray[index].className = newClassName;
     boardArray[index].textContent = "hi"; //debugging
     boardArray[index].classList.remove("hoverGray");
+    boardArray[index].removeEventListener('click', boardArray[index].attackHandler); //remove the click once the area has been clicked
     console.log(boardArray[index]);
 }
 
@@ -24,6 +25,7 @@ function boardAttack(x, y, player) {
         displayPlot(x, y, player.boardArray, "missClass");
     };
 }
+
 
 function constructPlayerBoard(player) {
 
@@ -38,10 +40,22 @@ function constructPlayerBoard(player) {
     var axisCounterY = 1;
 
     for (let i = 0; i < 100; i++) { // construct base plots with coordinates
+        const x = axisCounterX;
+        const y = axisCounterY;
+
         const plot = document.createElement("div");
-        plot.setAttribute("x", axisCounterX);
-        plot.setAttribute("y", axisCounterY);
+        plot.setAttribute("x", x);
+        plot.setAttribute("y", y);
         plot.setAttribute("class", "hoverGray");
+
+        plot.attackHandler = function () { //we have to define a function with a direct reference so it can recognized outside of the scope
+            if (turnSwitch !== player.getPlayerNumber()) return;
+            boardAttack(x, y, player);
+            switchTurn();
+        };
+
+        plot.addEventListener('click', plot.attackHandler);
+
         // plot.textContent = `${axisCounterX},${axisCounterY}`; // for debugging
         if (axisCounterX === 10) {
             axisCounterX = 1;
@@ -63,6 +77,16 @@ function constructPlayerBoard(player) {
 
 }
 
+function deactivateHover(player) {
+    boardArray[index].removeEventListener('click', boardArray[index].attackHandler);
+}
+
+var turnSwitch = 1; //global variable
+
+function switchTurn() {
+    if (turnSwitch === 1) turnSwitch = 2;
+    else turnSwitch = 1;
+}
 
 function runGame() {
 
@@ -72,19 +96,23 @@ function runGame() {
     const player2 = player();
     player2.setPlayerNumber(2);
 
-    constructPlayerBoard(player1);
-    constructPlayerBoard(player2);
-
     player1.useBoard().createShip([3, 3], [3, 5], "cruiser");
     player1.useBoard().createShip([4, 4], [4, 6], "battleship");
 
     player2.useBoard().createShip([8, 3], [3, 3], "cruiser");
     player2.useBoard().createShip([4, 2], [5, 2], "battleship");
 
+    constructPlayerBoard(player1);
+    constructPlayerBoard(player2);
+
+    const playerList = [player1, player2];
+
+
     // console.log(player2.useBoard().recieveAttack([8, 3]));
     // console.log(player2.useBoard().getShipList()[0].getShipSpaceCoordinates());
     boardAttack(8, 3, player2)
-    
+    boardAttack(8, 3, player1)
+
 
 };
 
