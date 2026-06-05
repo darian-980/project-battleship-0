@@ -184,6 +184,7 @@ export function gameboard() {
 
 export function player() {
     const boardArray = [];
+    const smallBoardArray = []
     const board = gameboard();
     var playerNumber = null;
     var playerType = "";
@@ -204,6 +205,6 @@ export function player() {
         return playerNumber;
     }
 
-    return { setPlayerType, useBoard, setPlayerNumber, getPlayerNumber, boardArray }
+    return { setPlayerType, useBoard, setPlayerNumber, getPlayerNumber, boardArray, smallBoardArray }
 }
 
