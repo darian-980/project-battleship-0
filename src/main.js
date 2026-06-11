@@ -70,6 +70,9 @@ function constructPlayerBoard(player) {
         plot.attackHandler = function () { //we have to define a function with a direct reference so it can recognized outside of the scope
             if (turnSwitch !== player.getPlayerNumber()) return;
             boardAttack(x, y, player);
+            if (player.useBoard().checkAllShipSunk()) { // once the player goes check if their ships are sunk and end game
+                endGame(player);
+            }
             switchTurn();
         };
 
@@ -111,6 +114,28 @@ function constructPlayerBoard(player) {
 
 function deactivateHover(player) {
     boardArray[index].removeEventListener('click', boardArray[index].attackHandler);
+}
+
+function endGame(player) {
+    // console.log("game end")
+
+    const winnerContainer = document.getElementsByClassName("winnerContainer")[0];
+    const regularContainer = document.getElementsByClassName("container")[0];
+
+    const playerNum = player.getPlayerNumber();
+    const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
+
+    const verticalDiv = document.createElement("div");
+    verticalDiv.setAttribute("class", "verticalWin");
+
+    const losingText = document.createElement("p");
+    losingText.textContent = "Player " + playerNum + " wins!"
+
+    regularContainer.style.display = 'none'; // hide all the gameboards
+    winnerContainer.appendChild(verticalDiv); //add vertical div to the container
+    verticalDiv.appendChild(losingText); // add losing text to the new container
+    verticalDiv.appendChild(grabBoard); // add losing board to the new container
+    winnerContainer.style.display = 'block'; //unhide the winnerContainer
 }
 
 var turnSwitch = 1; //global variable

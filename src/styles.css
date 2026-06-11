@@ -13,6 +13,24 @@ body {
   margin: 0;
 }
 
+* {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
+.winnerContainer {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   height: 100%;
   padding: 0;
@@ -20,6 +38,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.verticalWin {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .vertical {
@@ -60,7 +88,7 @@ body {
 }
 
 .hoverGray:hover {
-  background-color: #a0a0a0;
+  background-color: #a8a8a8;
 }
 
 
@@ -83,4 +111,8 @@ body {
 
 .ship-location {
   border: 1px solid rgb(255, 81, 0);
+}
+
+p {
+  color: white;
 }
