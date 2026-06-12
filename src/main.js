@@ -44,6 +44,25 @@ function displayShips(player) { //used to display friendly ships
 
 }
 
+function constructAxis(player) {
+    const playerNum = player.getPlayerNumber();
+
+    const axisX = document.querySelector(`#${CSS.escape(playerNum)}.axisX`) //grabs x visible axis
+    const axisY = document.querySelector(`#${CSS.escape(playerNum)}.axisY`) //grabs x visible axis
+
+    var counter = 0;
+
+    for (let i = 0; i < 10; i++) {
+        counter = i + 1;
+        const axisPlotX = document.createElement("div");
+        const axisPlotY = document.createElement("div");
+        axisPlotX.textContent = `${counter}`;
+        axisPlotY.textContent = `${counter}`;
+        axisX.appendChild(axisPlotX);
+        axisY.appendChild(axisPlotY);
+    }
+}
+
 
 function constructPlayerBoard(player) {
 
@@ -53,6 +72,7 @@ function constructPlayerBoard(player) {
 
     const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
 
+    constructAxis(player); //constructs axixes
     // console.log(player.getPlayerNumber())
 
     var axisCounterX = 1;
@@ -112,7 +132,7 @@ function constructPlayerBoard(player) {
 
 }
 
-function deactivateHover(player) {
+function deactivateHover(player) { //unused
     boardArray[index].removeEventListener('click', boardArray[index].attackHandler);
 }
 
@@ -123,7 +143,7 @@ function endGame(player) {
     const regularContainer = document.getElementsByClassName("container")[0];
 
     const playerNum = player.getPlayerNumber();
-    const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
+    const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.fourAxisGrid`) //grabs the div with the matching player number and has class board;
 
     const verticalDiv = document.createElement("div");
     verticalDiv.setAttribute("class", "verticalWin");

@@ -53,10 +53,20 @@ body {
 .vertical {
   padding: 0;
   margin: 0;
+  margin-left: 2em;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.horizontalAlign {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .small-board {
@@ -76,7 +86,8 @@ body {
   border-color: black;
   border: 1px solid black;
   background-color: aliceblue;
-  margin: 1em;
+  margin-top: 0px;
+  margin-left: 0px;
 }
 
 .missClass {
@@ -91,6 +102,69 @@ body {
   background-color: #a8a8a8;
 }
 
+.verticalAlign {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fourAxisGrid{
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+}
+
+.fillerX {
+  margin: 0px;
+}
+
+.fillerY {
+  height: 20px;
+  width: 30px;
+  margin: 0px;
+}
+
+.axisX {
+  display: grid;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(1, 30px);
+  border-color: black;
+  border: 1px solid black;
+  background-color: aliceblue;
+  margin-top: 1em;
+  margin-bottom: -1px;
+}
+
+.axisX div {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.axisY {
+  display: grid;
+  grid-template-columns: repeat(1, 30px);
+  grid-template-rows: repeat(10, 50px);
+  border-color: black;
+  border: 1px solid black;
+  background-color: aliceblue;
+  margin-right: -1px;
+}
+
+.axisY div {
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .board div {
   height: 100%;
