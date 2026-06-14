@@ -48,7 +48,7 @@ function constructAxis(player) {
     const playerNum = player.getPlayerNumber();
 
     const axisX = document.querySelector(`#${CSS.escape(playerNum)}.axisX`) //grabs x visible axis
-    const axisY = document.querySelector(`#${CSS.escape(playerNum)}.axisY`) //grabs x visible axis
+    const axisY = document.querySelector(`#${CSS.escape(playerNum)}.axisY`) //grabs y visible axis
 
     var counter = 0;
 
@@ -64,7 +64,10 @@ function constructAxis(player) {
 }
 
 
-function constructPlayerBoard(player) {
+function constructPlayerBoard(player, playerList) {
+
+    var player1Use = false;
+    if (player === playerList[0]) player1Use = true; //checks if the player is Player 1;
 
     const boardArray = player.boardArray; //takes the array from the player object and assigns it to boardArray
     const smallBoardArray = player.smallBoardArray;
@@ -72,7 +75,7 @@ function constructPlayerBoard(player) {
 
     const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
 
-    constructAxis(player); //constructs axixes
+    constructAxis(player); //constructs axises
     // console.log(player.getPlayerNumber())
 
     var axisCounterX = 1;
@@ -89,11 +92,24 @@ function constructPlayerBoard(player) {
 
         plot.attackHandler = function () { //we have to define a function with a direct reference so it can recognized outside of the scope
             if (turnSwitch !== player.getPlayerNumber()) return;
-            boardAttack(x, y, player);
+            if (player1Use === true && player2Type === "CPU") {
+                const generateAttack = CPUAttack(playerList[1]);
+                const xAttack = generateAttack[0];
+                const yAttack = generateAttack[1];
+
+                boardAttack(x, y, player);
+                boardAttack(xAttack, yAttack, playerList[1]);
+                if (playerList[1].useBoard().checkAllShipSunk()) { // once the player goes check if their ships are sunk and end game
+                    endGame(playerList[1]);
+                }
+            } else {
+                boardAttack(x, y, player);
+                switchTurn();
+            }
             if (player.useBoard().checkAllShipSunk()) { // once the player goes check if their ships are sunk and end game
                 endGame(player);
             }
-            switchTurn();
+
         };
 
         plot.addEventListener('click', plot.attackHandler);
@@ -120,20 +136,40 @@ function constructPlayerBoard(player) {
 
     }
 
+
     displayShips(player);
-
-    // console.log(boardArray);
-
-    // console.log("index: " + calcBoardIndex(3, 4))
-
-    // displayPlot(3, 4, boardArray);
-    // displayPlot(1, 4, boardArray);
-    // displayPlot(7, 4, boardArray, "missClass");
-
 }
 
 function deactivateHover(player) { //unused
     boardArray[index].removeEventListener('click', boardArray[index].attackHandler);
+}
+
+function CPUAttack(player) {
+    const missedShots = player.useBoard().missedShots;
+    const hitShots = player.useBoard().hitShots;
+    const allShots = [...missedShots, ...hitShots]; //grab all shots that the CPU has already taken
+
+    var generateShot = [generateNum(), generateNum()];
+    var LoopLeft = 1;
+
+    while (LoopLeft > 0) {
+        LoopLeft -= 1;
+        for (let i = 0; i < allShots.length; i++) {
+            if (allShots[i][0] === generateShot[0] && allShots[i][1] === generateShot[1]) {
+                generateShot = [generateNum(), generateNum()]; //regenerate shot
+                LoopLeft += 1;
+                break;
+            }
+        }
+    }
+
+    console.log(allShots)
+
+    return generateShot;
+}
+
+function generateNum() { // random number from 1 - 10
+    return Math.floor(Math.random() * (11 - 1) + 1);
 }
 
 function endGame(player) {
@@ -158,7 +194,36 @@ function endGame(player) {
     winnerContainer.style.display = 'block'; //unhide the winnerContainer
 }
 
+function hookButtons() { //add buttons with functionality to start screen
+    const realPlayerButton = document.querySelector(`#${CSS.escape("player")}.button`);
+    const CPUbutton = document.querySelector(`#${CSS.escape("CPU")}.button`);
+    const gameStartContainer = document.getElementsByClassName("gameStart")[0];
+    const regularContainer = document.getElementsByClassName("container")[0];
+
+    realPlayerButton.addEventListener("click", function () {
+        retrievePlayerType(realPlayerButton);
+        gameStartContainer.style.display = 'none';
+        regularContainer.style.display = 'flex';
+        // HIDE THE GAMESTART CONTAINER AND SHOW THE GAME CONTAINER
+    });
+
+    CPUbutton.addEventListener("click", function () {
+        retrievePlayerType(CPUbutton);
+        gameStartContainer.style.display = 'none';
+        regularContainer.style.display = 'flex';
+    });
+
+}
+
+function retrievePlayerType(button) { //retrieve and assign the playertype based on the button pressed
+    const playerType = button.getAttribute("id");
+    player2Type = playerType;
+}
+
+
 var turnSwitch = 1; //global variable
+var player2Type = null; //global variable
+var player1Set = false; //changes once player 1 is set
 
 function switchTurn() {
     if (turnSwitch === 1) turnSwitch = 2;
@@ -173,22 +238,28 @@ function runGame() {
     const player2 = player();
     player2.setPlayerNumber(2);
 
+    hookButtons();
+
     player1.useBoard().createShip([3, 3], [3, 5], "cruiser");
     player1.useBoard().createShip([4, 4], [4, 6], "battleship");
 
     player2.useBoard().createShip([8, 3], [3, 3], "cruiser");
     player2.useBoard().createShip([4, 2], [5, 2], "battleship");
 
-    constructPlayerBoard(player1);
-    constructPlayerBoard(player2);
-
     const playerList = [player1, player2];
+
+    constructPlayerBoard(player1, playerList);
+    constructPlayerBoard(player2, playerList);
+
+
 
 
     // console.log(player2.useBoard().recieveAttack([8, 3]));
     // console.log(player2.useBoard().getShipList()[0].getShipSpaceCoordinates());
     boardAttack(8, 3, player2)
     boardAttack(8, 3, player1)
+
+    console.log(CPUAttack(player2));
 
 
 };

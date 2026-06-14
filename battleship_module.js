@@ -179,7 +179,7 @@ export function gameboard() {
         return shipList;
     }
 
-    return { createShip, getShipList, recieveAttack, checkAllShipSunk };
+    return { createShip, getShipList, recieveAttack, checkAllShipSunk, missedShots, hitShots };
 }
 
 export function player() {

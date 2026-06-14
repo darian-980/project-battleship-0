@@ -40,6 +40,40 @@ body {
   justify-content: center;
 }
 
+.gameStart {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.gameStart p {
+  font-size: 2em;
+}
+
+.buttonList {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonList div{
+  font-size: 1.2em;
+  color: aliceblue;
+  margin: 1em;
+  border: 2px solid #F5F0FF;
+  padding: 0.3em;
+}
+
+.buttonList div:hover{
+ background-color: rgb(104, 104, 104);
+}
+
 .verticalWin {
   height: 100%;
   padding: 0;
@@ -103,15 +137,15 @@ body {
 }
 
 .verticalAlign {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.fourAxisGrid{
+.fourAxisGrid {
   display: grid;
   grid-template-columns: auto auto;
   grid-template-rows: auto auto;
