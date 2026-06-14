@@ -54,6 +54,16 @@ body {
   font-size: 2em;
 }
 
+.passTurn {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .buttonList {
   padding: 0;
   margin: 0;
@@ -62,7 +72,7 @@ body {
   justify-content: center;
 }
 
-.buttonList div{
+.buttonList div {
   font-size: 1.2em;
   color: aliceblue;
   margin: 1em;
@@ -70,8 +80,20 @@ body {
   padding: 0.3em;
 }
 
-.buttonList div:hover{
- background-color: rgb(104, 104, 104);
+.passButton {
+  font-size: 1.2em;
+  color: aliceblue;
+  margin: 1em;
+  border: 2px solid #F5F0FF;
+  padding: 1em;
+}
+
+.buttonList div:hover {
+  background-color: rgb(104, 104, 104);
+}
+
+#turn {
+  font-size: 3em;
 }
 
 .verticalWin {
@@ -223,4 +245,5 @@ body {
 
 p {
   color: white;
+  margin: 0.5em;
 }

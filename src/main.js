@@ -72,9 +72,12 @@ function constructPlayerBoard(player, playerList) {
     const boardArray = player.boardArray; //takes the array from the player object and assigns it to boardArray
     const smallBoardArray = player.smallBoardArray;
     const playerNum = player.getPlayerNumber();
+    const grabColumn = document.querySelector(`#${CSS.escape(playerNum)}.vertical`)
+    const grabTurnDiv = document.getElementsByClassName("passTurn")[0];
+    const passButton = document.querySelector(`#${CSS.escape(playerNum)}.passButton`);
 
     const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
-
+    
     constructAxis(player); //constructs axises
     // console.log(player.getPlayerNumber())
 
@@ -88,7 +91,7 @@ function constructPlayerBoard(player, playerList) {
         const plot = document.createElement("div");
         plot.setAttribute("x", x);
         plot.setAttribute("y", y);
-        plot.setAttribute("class", "hoverGray");
+        if (player1Use === true) plot.setAttribute("class", "hoverGray");
 
         plot.attackHandler = function () { //we have to define a function with a direct reference so it can recognized outside of the scope
             if (turnSwitch !== player.getPlayerNumber()) return;
@@ -103,6 +106,7 @@ function constructPlayerBoard(player, playerList) {
                     endGame(playerList[1]);
                 }
             } else {
+                passButton.style.visibility = 'visible';
                 boardAttack(x, y, player);
                 switchTurn();
             }
@@ -136,12 +140,34 @@ function constructPlayerBoard(player, playerList) {
 
     }
 
+    passButton.addEventListener('click', function () {
+        passButton.style.visibility = 'hidden'; // hide button for next time once it's pressed
+        grabColumn.style.display = 'none';
+        grabTurnDiv.style.display = 'flex';
+    })
+
 
     displayShips(player);
 }
 
 function deactivateHover(player) { //unused
     boardArray[index].removeEventListener('click', boardArray[index].attackHandler);
+}
+
+function swapRealPlayerTurns() {
+    const grabTurnDiv = document.getElementsByClassName("passTurn")[0];
+    const grabColumnPlayer1 = document.querySelector(`#${CSS.escape(1)}.vertical`);
+    const grabColumnPlayer2 = document.querySelector(`#${CSS.escape(2)}.vertical`);
+
+    grabTurnDiv.style.display = 'none';
+
+    if (turnSwitch === 2) {
+        grabColumnPlayer1.style.display = 'none';
+        grabColumnPlayer2.style.display = 'flex';
+    } else {
+        grabColumnPlayer1.style.display = 'flex';
+        grabColumnPlayer2.style.display = 'none';
+    }
 }
 
 function CPUAttack(player) {
@@ -199,11 +225,15 @@ function hookButtons() { //add buttons with functionality to start screen
     const CPUbutton = document.querySelector(`#${CSS.escape("CPU")}.button`);
     const gameStartContainer = document.getElementsByClassName("gameStart")[0];
     const regularContainer = document.getElementsByClassName("container")[0];
+    const TurnButton = document.getElementById("turn");
+
+    const player2vertical = document.querySelector(`#${CSS.escape("2")}.vertical`);
 
     realPlayerButton.addEventListener("click", function () {
         retrievePlayerType(realPlayerButton);
         gameStartContainer.style.display = 'none';
         regularContainer.style.display = 'flex';
+        player2vertical.style.display = 'none'; //only hides player board 2 ON START
         // HIDE THE GAMESTART CONTAINER AND SHOW THE GAME CONTAINER
     });
 
@@ -212,6 +242,11 @@ function hookButtons() { //add buttons with functionality to start screen
         gameStartContainer.style.display = 'none';
         regularContainer.style.display = 'flex';
     });
+
+    TurnButton.addEventListener("click", function () {
+        swapRealPlayerTurns();
+    })
+
 
 }
 
@@ -224,6 +259,7 @@ function retrievePlayerType(button) { //retrieve and assign the playertype based
 var turnSwitch = 1; //global variable
 var player2Type = null; //global variable
 var player1Set = false; //changes once player 1 is set
+var playerList = [];
 
 function switchTurn() {
     if (turnSwitch === 1) turnSwitch = 2;
@@ -246,7 +282,7 @@ function runGame() {
     player2.useBoard().createShip([8, 3], [3, 3], "cruiser");
     player2.useBoard().createShip([4, 2], [5, 2], "battleship");
 
-    const playerList = [player1, player2];
+    playerList = [player1, player2];
 
     constructPlayerBoard(player1, playerList);
     constructPlayerBoard(player2, playerList);
