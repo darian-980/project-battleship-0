@@ -185,6 +185,7 @@ export function gameboard() {
 export function player() {
     const boardArray = [];
     const smallBoardArray = []
+    const chooseShipArray = []
     const board = gameboard();
     var playerNumber = null;
     var playerType = "";
@@ -205,6 +206,6 @@ export function player() {
         return playerNumber;
     }
 
-    return { setPlayerType, useBoard, setPlayerNumber, getPlayerNumber, boardArray, smallBoardArray }
+    return { setPlayerType, useBoard, setPlayerNumber, getPlayerNumber, boardArray, smallBoardArray, chooseShipArray }
 }
 

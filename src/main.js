@@ -63,6 +63,111 @@ function constructAxis(player) {
     }
 }
 
+function generateShip(shipLength, occupiedSpaces = []) {
+
+    function genShip() {
+        var generateStartX = Math.floor(Math.random() * (11 - 1) + 1); // generates random point anywhere on the grid
+        var generateStartY = Math.floor(Math.random() * (11 - 1) + 1); // generates random point anywhere on the grid
+
+        var angle = Math.floor(Math.random() * (3 - 1) + 1); // returns either 1 or 2
+        var operator = null; // used to mark what operator we used
+
+        var generateEndX;
+        var generateEndY;
+
+        if (angle === 1) { //vertical ship
+            generateEndX = generateStartX;
+            if (generateStartY + shipLength > 10) {
+                generateEndY = generateStartY + shipLength;
+                operator = "add";
+            } else {
+                generateEndY = generateStartY - shipLength;
+                operator = "sub";
+            };
+        } else { // horizontal ship
+            generateEndY = generateStartY;
+            if (generateStartX + shipLength > 10) {
+                generateEndX = generateStartX + shipLength;
+                operator = "add";
+            } else {
+                generateEndX = generateStartX - shipLength;
+                operator = "sub";
+            }
+        }
+
+        var shipCoordinates = [];
+        shipCoordinates.push(generateStartX, generateStartY);
+
+        var x = generateStartX;
+        var y = generateStartY;
+
+        for (let i = 0; i < shipLength; i++) {
+            if (angle === 1) {
+                if (operator === "add") {
+                    y = generateStartY + i;
+                } else {
+                    y = generateStartY - i;
+                }
+            } else {
+                if (operator === "add") {
+                    x = generateStartX + i;
+                } else {
+                    x = generateStartX - i;
+                }
+            }
+            shipCoordinates.push(x, y)
+        }
+        return shipCoordinates;
+
+    }
+
+    var LoopLeft = 1;
+
+    while (LoopLeft > 0) {
+        LoopLeft -= 1;
+        for (let i = 0; i < occupiedSpaces.length; i++) {
+            if (allShots[i][0] === generateShot[0] && allShots[i][1] === generateShot[1]) {
+                generateShot = [generateNum(), generateNum()]; //regenerate shot
+                LoopLeft += 1;
+                break;
+            }
+        }
+    }
+}
+
+function constructChooseShips(player, playerList) {
+    const playerNum = player.getPlayerNumber();
+    const chooseShipArray = player.chooseShipArray;
+    const grabChooseShipsBoard = document.querySelector(`#${CSS.escape(playerNum)}.chooseShipsBoard`)
+    var occupiedSpaces = [];
+
+    var axisCounterX = 1;
+    var axisCounterY = 1;
+
+    for (let i = 0; i < 100; i++) {
+        const x = axisCounterX;
+        const y = axisCounterY;
+
+        const plot = document.createElement("div");
+
+        grabChooseShipsBoard.appendChild(plot);
+        chooseShipArray.push(plot);
+
+        if (axisCounterX === 10) {
+            axisCounterX = 1;
+            axisCounterY += 1;
+        } else {
+            axisCounterX += 1;
+        }
+    }
+
+    for (let i = 0; i < 5; i++) {
+
+    }
+
+
+}
+
 
 function constructPlayerBoard(player, playerList) {
 
@@ -77,7 +182,7 @@ function constructPlayerBoard(player, playerList) {
     const passButton = document.querySelector(`#${CSS.escape(playerNum)}.passButton`);
 
     const grabBoard = document.querySelector(`#${CSS.escape(playerNum)}.board`) //grabs the div with the matching player number and has class board;
-    
+
     constructAxis(player); //constructs axises
     // console.log(player.getPlayerNumber())
 
@@ -89,8 +194,8 @@ function constructPlayerBoard(player, playerList) {
         const y = axisCounterY;
 
         const plot = document.createElement("div");
-        plot.setAttribute("x", x);
-        plot.setAttribute("y", y);
+        plot.setAttribute("x", x); // unused
+        plot.setAttribute("y", y); // unused
         if (player1Use === true) plot.setAttribute("class", "hoverGray");
 
         plot.attackHandler = function () { //we have to define a function with a direct reference so it can recognized outside of the scope
@@ -286,6 +391,8 @@ function runGame() {
 
     constructPlayerBoard(player1, playerList);
     constructPlayerBoard(player2, playerList);
+
+    constructChooseShips(player1, playerList);
 
 
 

@@ -40,6 +40,19 @@ body {
   justify-content: center;
 }
 
+.playerSetBoard {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playerSetBoard p {
+  font-size: 2em;
+}
+
 .gameStart {
   height: 100%;
   padding: 0;
@@ -146,6 +159,17 @@ body {
   margin-left: 0px;
 }
 
+.chooseShipsBoard {
+  display: grid;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(10, 50px);
+  border-color: black;
+  border: 1px solid black;
+  background-color: aliceblue;
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
 .missClass {
   background-color: #a83232;
 }
@@ -233,6 +257,13 @@ body {
   height: 75%;
   width: 75%;
   padding: 0.1em;
+}
+
+.chooseShipsBoard div {
+  height: 100%;
+  width: 100%;
+  /* background-color: green; */
+  border: 1px solid black;
 }
 
 .non-ship-location {
